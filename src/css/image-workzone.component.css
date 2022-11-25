@@ -1,0 +1,23 @@
+image-workzone {
+  display: block;
+  min-width: 300px;
+  min-height: 200px;
+  color: white;
+  border-radius: 10px;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.624);
+}
+image-workzone:hover {
+  background-color: rgba(0, 0, 0, 0.68);
+}
+image-workzone .image-workzone-block {
+  display: flex;
+  min-height: 200px;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.error-message {
+  color: red;
+}
