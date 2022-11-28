@@ -2,7 +2,9 @@
 	<div class="image-workzone-block__empty-message">
 		Select an image!
 	</div>
-	<div class="image-workzone-block__image-block">
-		&nbsp;
+	<div class="image-workzone-block__image-block" (mousedown)="startDragging($event)" (mouseup)="finishDragging()">
+		<ng-template #selectionsContainer>
+
+		</ng-template>
 	</div>
 </div>

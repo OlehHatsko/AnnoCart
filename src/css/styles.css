@@ -1,6 +1,8 @@
 /*cancelling default styles*/
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap");
 @import url("./css/image-workzone.component.css");
+@import url("./css/box-selection.component.css");
+@import url("./css/info-block.component.css");
 * {
   padding: 0;
   margin: 0;
@@ -131,6 +133,7 @@ footer {
 }
 
 .workzone {
+  position: relative;
   width: 100%;
   background-color: #C0A9BD;
   background-image: url("../src/img/background.jpg");

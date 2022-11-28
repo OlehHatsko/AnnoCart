@@ -1,11 +1,14 @@
 image-workzone {
-  display: block;
+  display: flex;
   min-width: 300px;
   min-height: 200px;
+  align-items: center;
+  justify-content: center;
   color: white;
   border-radius: 10px;
   padding: 10px;
   background-color: rgba(0, 0, 0, 0.624);
+  position: relative;
 }
 image-workzone:hover {
   background-color: rgba(0, 0, 0, 0.68);
@@ -19,5 +22,20 @@ image-workzone .image-workzone-block {
 }
 
 .error-message {
+  display: block;
   color: red;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.image-workzone-block__image-block {
+  width: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.image-workzone-block__empty-message {
+  text-align: center;
 }

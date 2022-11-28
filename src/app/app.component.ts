@@ -1,5 +1,7 @@
-import { Component, Inject } from '@angular/core';
+import { Component, ComponentRef, QueryList, ViewChild, ViewContainerRef } from '@angular/core';
+import { BoxSelectionComponent } from './box-selection/box-selection.component';
 import { DataService } from './data-service/dataService';
+import { ImageWorkzoneComponent } from './image-workzone/image-workzone.component';
 
 @Component({
   selector: 'app-root',
@@ -7,12 +9,20 @@ import { DataService } from './data-service/dataService';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  //selectionsContainer: ViewContainerRef;
+  @ViewChild(ImageWorkzoneComponent) selectionsContainer: ImageWorkzoneComponent;
   title = 'AnnoCart';
   private file: File;
 
-  constructor(private dataService: DataService) {}
+  emptyTextElement: JQuery<HTMLElement>;
 
-  private selectImageButtonPressed() {
+  constructor(private dataService: DataService) { }
+
+  ngAfterViewInit() {
+    this.emptyTextElement = $('.image-workzone-block__empty-message');
+  }
+
+  selectImageButtonPressed() {
     var input = <HTMLInputElement>document.createElement('input');
     input.type = 'file';
     input.click();
@@ -25,20 +35,33 @@ export class AppComponent {
   }
 
   selectSquereRegionButtonPressed() {
-    alert('selectSquereRegionPressed');
+    if(!this.selectionsContainer.isImageLoaded){
+      this.showErrorMessage('Load image first!');
+      return;
+    }
+
+    this.selectionsContainer.createBoxSelection();
   }
 
   selectPointPressed() {
     alert('selectPointPressed');
   }
 
-  ngAfterViewInit() {
-    let selectImageButton = $('#selectImage');
-    let selectSquereRegionButtom = $('#selectSquereRegion');
-    let selectPointButtom = $('#selectPoint');
+  showAll() {
 
-    selectImageButton.click(this.selectImageButtonPressed.bind(this));
-    selectSquereRegionButtom.click(this.selectSquereRegionButtonPressed.bind(this));
-    selectPointButtom.click(this.selectPointPressed.bind(this));
+  }
+
+  makeSelectionsRed() {
+
+  }
+
+  makeSelectionsBlue() {
+
+  }
+
+  private showErrorMessage(message: string)
+  {
+    this.emptyTextElement.addClass('error-message');
+    this.emptyTextElement.html(message);
   }
 }

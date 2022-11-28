@@ -1,20 +1,34 @@
 /*cancelling default styles*/
-*{
+* {
 	padding: 0;
 	margin: 0;
 	border: 0;
 }
-*,*:before,*:after{
+*,
+*:before,
+*:after {
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 }
-:focus,:active{outline: none;}
-a:focus,a:active{outline: none;}
+:focus,
+:active {
+	outline: none;
+}
+a:focus,
+a:active {
+	outline: none;
+}
 
-nav,footer,header,aside{display: block;}
+nav,
+footer,
+header,
+aside {
+	display: block;
+}
 
-html,body{
+html,
+body {
 	height: 100%;
 	width: 100%;
 	font-size: 100%;
@@ -24,60 +38,88 @@ html,body{
 	-moz-text-size-adjust: 100%;
 	-webkit-text-size-adjust: 100%;
 }
-input,button,textarea{font-family:inherit;}
+input,
+button,
+textarea {
+	font-family: inherit;
+}
 
-input::-ms-clear{display: none;}
-button{cursor: pointer;}
-button::-moz-focus-inner {padding:0;border:0;}
-a, a:visited{text-decoration: none;}
-a:hover{text-decoration: none;}
-ul li{list-style: none;}
-img{vertical-align: top;}
+input::-ms-clear {
+	display: none;
+}
+button {
+	cursor: pointer;
+}
+button::-moz-focus-inner {
+	padding: 0;
+	border: 0;
+}
+a,
+a:visited {
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: none;
+}
+ul li {
+	list-style: none;
+}
+img {
+	vertical-align: top;
+}
 
-h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight: 400;}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-size: inherit;
+	font-weight: 400;
+}
 /*--------------------*/
 
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap");
 
 .wrapper {
-    min-height: 100%;
-    display: grid;
-    grid-template: minmax(50px, auto) 1fr minmax(20px, auto) / 1fr;
-    grid-template-areas: 
-        "header"
-        "main"
-        "footer";
-    background-color: #f4f2f3;
-	font-family: 'Roboto Mono', monospace;
+	min-height: 100%;
+	display: grid;
+	grid-template: minmax(50px, auto) 1fr minmax(20px, auto) / 1fr;
+	grid-template-areas:
+		"header"
+		"main"
+		"footer";
+	background-color: #f4f2f3;
+	font-family: "Roboto Mono", monospace;
 }
 
-header{
-    grid-area: header;
-	color:#f4f2f3;
-    background-color: #64766A;
+header {
+	grid-area: header;
+	color: #f4f2f3;
+	background-color: #64766a;
 }
 
-h1{
+h1 {
 	font-size: 2.4em;
 	padding: 8.2px;
 	display: inline-block;
 }
 
 main {
-    grid-area: main;
-    display: flex;
+	grid-area: main;
+	display: flex;
 }
 
-footer{
-    grid-area: footer;
-    background-color: #64766A;
+footer {
+	grid-area: footer;
+	background-color: #64766a;
 }
 
 .sidebar {
 	width: 50px;
 	display: flex;
 	flex-direction: column;
-	background-color: #94A7AE;
+	background-color: #94a7ae;
 }
 
 .sidebar__action-item {
@@ -85,24 +127,28 @@ footer{
 	display: block;
 	padding: 10px 0;
 	cursor: pointer;
-	img{
+	img {
 		display: block;
 		margin: 0px auto;
 		width: 30px;
 		filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(164deg) brightness(99%) contrast(103%);
 	}
-	&:hover{
+	&:hover {
 		background-color: #f4f2f3;
-		img{
+		img {
 			filter: none;
 		}
+	}
+	&:hover .sidebar__action-item--rounded {
+		border: 2px solid black;
 	}
 }
 
 .workzone {
+	position: relative;
 	width: 100%;
-	background-color: #C0A9BD;
-	background-image: url('../src/img/background.jpg');
+	background-color: #c0a9bd;
+	background-image: url("../src/img/background.jpg");
 	background-size: 400px;
 	background-repeat: repeat;
 	display: flex;
@@ -110,4 +156,25 @@ footer{
 	align-items: center;
 }
 
-@import url('./css/image-workzone.component.css');
+.sidebar__action-item--rounded {
+	border-radius: 50%;
+	border: 2px solid white;
+	width: 30px;
+	height: 30px;
+	margin: 0 auto;
+	padding: 10px;
+}
+.sidebar__action-item--rounded-red {
+	@extend .sidebar__action-item--rounded;
+
+	background-color: rgb(255, 85, 85);
+}
+.sidebar__action-item--rounded-blue {
+	@extend .sidebar__action-item--rounded;
+
+	background-color: rgba(0, 195, 255, 0.78);
+}
+
+@import url("./css/image-workzone.component.css");
+@import url("./css/box-selection.component.css");
+@import url("./css/info-block.component.css");

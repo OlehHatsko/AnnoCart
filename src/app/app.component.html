@@ -4,18 +4,29 @@
   </header>
   <main>
     <aside class="sidebar">
-      <div class="sidebar__action-item" id="selectImage">
+      <div (click)="selectImageButtonPressed()" class="sidebar__action-item">
         <img src="../assets/img/icons/add-image-svgrepo-com.svg" alt="Select Image">
       </div>
-      <div class="sidebar__action-item" id="selectSquereRegion">
+      <div (click)="selectSquereRegionButtonPressed()" class="sidebar__action-item">
         <img src="../assets/img/icons/select_square.svg" alt="Select Square">
       </div>
-      <div class="sidebar__action-item" id="selectPoint">
+      <div (click)="selectPointPressed()" class="sidebar__action-item">
         <img src="../assets/img/icons/pin.svg" alt="Pin">
+      </div>
+      <div (click)="showAll()" class="sidebar__action-item">
+        <img src="../assets/img/icons/showall.png" alt="ShowAll">
+      </div>
+      <div (click)="makeSelectionsRed()" class="sidebar__action-item">
+        <div class="sidebar__action-item--rounded sidebar__action-item--rounded-red"></div>
+      </div>
+      <div (click)="makeSelectionsBlue()" class="sidebar__action-item">
+        <div class="sidebar__action-item--rounded sidebar__action-item--rounded-blue"></div>
       </div>
     </aside>
     <div class="workzone">
+      <!-- <image-workzone (selectionsContainerEvent)="setSelectionContainer($event)"></image-workzone> -->
       <image-workzone></image-workzone>
+      <info-block></info-block>
     </div>
   </main>
   <footer>

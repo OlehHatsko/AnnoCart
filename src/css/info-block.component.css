@@ -1,0 +1,53 @@
+info-block {
+  position: absolute;
+  display: flex;
+  background-color: whitesmoke;
+  width: 100%;
+  min-height: 100px;
+  bottom: 0;
+}
+info-block p {
+  display: block;
+}
+
+.info-header {
+  background-color: #64766a;
+  display: flex;
+  align-content: center;
+  justify-content: space-between;
+  padding: 0px 15px;
+}
+
+.info-header__block-name {
+  padding: 15px 0px;
+  color: #f4f2f3;
+}
+
+.info-header__buttons-zone {
+  display: flex;
+}
+
+.info-header__button, .info-header__buttons-zone--delete, .info-header__buttons-zone--save {
+  display: block;
+  padding: 15px;
+  cursor: pointer;
+  color: #f4f2f3;
+}
+
+.info-header__buttons-zone--save {
+  background-color: rgb(89, 152, 92);
+}
+.info-header__buttons-zone--save:hover {
+  background-color: rgb(86, 174, 90);
+}
+
+.info-header__buttons-zone--delete {
+  background-color: rgb(255, 59, 59);
+}
+.info-header__buttons-zone--delete:hover {
+  background-color: rgb(250, 27, 27);
+}
+
+.info__description {
+  padding: 15px;
+}

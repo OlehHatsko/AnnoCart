@@ -1,0 +1,16 @@
+box-selection {
+	position: absolute;
+	cursor: pointer;
+	border-radius: 0px 10px;
+	border: 1px solid  rgba(0, 195, 255, 0.78);
+	background-color: rgba(0, 195, 255, 0.28);
+}
+
+.hoverable-selection{
+	opacity: 0;
+	transition: 150ms;
+	&:hover{
+		transition: 150ms;
+		opacity: 1;
+	}
+}
