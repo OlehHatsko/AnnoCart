@@ -1,11 +1,14 @@
-import { Component, ElementRef, HostBinding } from '@angular/core';
+import { Component, ElementRef, HostBinding, HostListener } from '@angular/core';
+import { InfoBlockComponent } from '../info-block/info-block.component';
+import { ISelection } from '../ts/ISelection';
+import { SelectionType } from '../ts/SelectionType';
 
 @Component({
   selector: 'box-selection',
   templateUrl: './box-selection.component.html',
   styleUrls: ['./box-selection.component.scss']
 })
-export class BoxSelectionComponent {
+export class BoxSelectionComponent implements ISelection {
   @HostBinding('class')
   elementClass: string;
 
@@ -14,22 +17,24 @@ export class BoxSelectionComponent {
     pointY: number;
   }
 
+  selectionType = SelectionType.box;
   id: number;
+  isShowAllEnabled = false;
+
+  infoBlock: InfoBlockComponent;
 
   constructor(public elRef: ElementRef) {
   }
 
-  public showAlways() {
+  public show() {
     this.elementClass = '';
   }
 
-  public makeHoverable() {
+  public hide() {
     this.elementClass = 'hoverable-selection';
   }
 
   public updateSizing(mouseX: number, mouseY: number, parentWidth: number, parentHeight: number) {
-    const offset = 0;
-
     let style = this.elRef.nativeElement.style;
     let height: number, width: number, top: number, left: number;
 
@@ -42,8 +47,8 @@ export class BoxSelectionComponent {
       top = this.initialPoint.pointY;
       left = this.initialPoint.pointX;
 
-      height = Math.min(mouseY + offset - this.initialPoint.pointY, maxBottom);
-      width = Math.min(mouseX + offset - this.initialPoint.pointX, maxRight)
+      height = Math.min(mouseY - this.initialPoint.pointY, maxBottom);
+      width = Math.min(mouseX - this.initialPoint.pointX, maxRight)
     }
     else if (mouseX < this.initialPoint.pointX && mouseY < this.initialPoint.pointY) {
       maxTop = this.initialPoint.pointY - 15;
@@ -52,8 +57,8 @@ export class BoxSelectionComponent {
       top = Math.max(mouseY, 15);
       left = Math.max(mouseX, 15);
 
-      height = Math.min(this.initialPoint.pointY - mouseY - offset, maxTop);
-      width = Math.min(this.initialPoint.pointX - mouseX - offset, maxLeft);
+      height = Math.min(this.initialPoint.pointY - mouseY, maxTop);
+      width = Math.min(this.initialPoint.pointX - mouseX, maxLeft);
     }
     else if (mouseX < this.initialPoint.pointX && mouseY > this.initialPoint.pointY) {
       maxBottom = parentHeight - this.initialPoint.pointY;
@@ -62,8 +67,8 @@ export class BoxSelectionComponent {
       top = this.initialPoint.pointY;
       left = Math.max(mouseX, 15);;
 
-      height = Math.min(mouseY + offset - this.initialPoint.pointY, maxBottom);
-      width = Math.min(this.initialPoint.pointX - mouseX - offset, maxLeft);
+      height = Math.min(mouseY - this.initialPoint.pointY, maxBottom);
+      width = Math.min(this.initialPoint.pointX - mouseX, maxLeft);
     }
     else if (mouseX > this.initialPoint.pointX && mouseY < this.initialPoint.pointY) {
       maxTop = this.initialPoint.pointY - 15;
@@ -72,14 +77,31 @@ export class BoxSelectionComponent {
       top = Math.max(mouseY, 15);
       left = this.initialPoint.pointX;
 
-      height = Math.min(this.initialPoint.pointY - mouseY - offset, maxTop);
-      width = Math.min(mouseX + offset - this.initialPoint.pointX, maxRight);
+      height = Math.min(this.initialPoint.pointY - mouseY, maxTop);
+      width = Math.min(mouseX - this.initialPoint.pointX, maxRight);
     }
 
     style.setProperty('height', this.formatToPx(height));
     style.setProperty('width', this.formatToPx(width));
     style.setProperty('left', this.formatToPx(left));
     style.setProperty('top', this.formatToPx(top));
+  }
+
+  @HostListener('click')
+  public clicked(): void {
+    this.infoBlock.turnEditModeOn();
+  }
+
+  @HostListener('mouseenter')
+  public mouseenterListener(): void {
+    this.infoBlock.show();
+  }
+
+  @HostListener('mouseleave')
+  public mouseleaveListener(): void {
+    if (!this.infoBlock.isEditModeOn) {
+      this.infoBlock.hide();
+    }
   }
 
   private formatToPx = (input: any) => input + 'px';

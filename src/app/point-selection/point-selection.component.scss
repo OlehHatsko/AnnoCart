@@ -1,0 +1,14 @@
+.point-selection {
+	width: 30px;
+	height: 30px;
+	border-radius: 15px;
+	position: absolute;
+	cursor: pointer;
+	
+	img {
+		display: block;
+		margin: 0px auto;
+		width: 30px;
+		filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(164deg) brightness(99%) contrast(103%);
+	}
+}

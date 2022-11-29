@@ -1,5 +1,6 @@
 $padding: 15px;
 $textColor: #f4f2f3;
+$darkGreen: #64766a;
 
 info-block {
 	position: absolute;
@@ -11,6 +12,23 @@ info-block {
 	p {
 		display: block;
 	}
+}
+
+.info {
+	width: 100%;
+}
+
+input {
+	border: 2px solid $darkGreen;
+	border-radius: 4px;
+	width: 100%;
+}
+
+textarea {
+	@extend input;
+
+	resize: none;
+	overflow: auto;
 }
 
 .info-header {
@@ -31,15 +49,15 @@ info-block {
 }
 
 .info-header__button {
-display: block;
-padding: $padding;
-cursor: pointer;
-color: $textColor;
+	display: block;
+	padding: $padding;
+	cursor: pointer;
+	color: $textColor;
 }
 
 .info-header__buttons-zone--save {
 	@extend .info-header__button;
-	
+
 	background-color: rgb(89, 152, 92);
 
 	&:hover {

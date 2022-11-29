@@ -10,6 +10,21 @@ info-block p {
   display: block;
 }
 
+.info {
+  width: 100%;
+}
+
+input, textarea {
+  border: 2px solid #64766a;
+  border-radius: 4px;
+  width: 100%;
+}
+
+textarea {
+  resize: none;
+  overflow: auto;
+}
+
 .info-header {
   background-color: #64766a;
   display: flex;

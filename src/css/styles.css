@@ -3,29 +3,38 @@
 @import url("./css/image-workzone.component.css");
 @import url("./css/box-selection.component.css");
 @import url("./css/info-block.component.css");
+@import url("./css/point-selection.component.css");
 * {
   padding: 0;
   margin: 0;
   border: 0;
 }
 
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: border-box;
 }
 
-:focus, :active {
+:focus,
+:active {
   outline: none;
 }
 
-a:focus, a:active {
+a:focus,
+a:active {
   outline: none;
 }
 
-nav, footer, header, aside {
+nav,
+footer,
+header,
+aside {
   display: block;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   width: 100%;
   font-size: 100%;
@@ -36,7 +45,9 @@ html, body {
   -webkit-text-size-adjust: 100%;
 }
 
-input, button, textarea {
+input,
+button,
+textarea {
   font-family: inherit;
 }
 
@@ -53,7 +64,8 @@ button::-moz-focus-inner {
   border: 0;
 }
 
-a, a:visited {
+a,
+a:visited {
   text-decoration: none;
 }
 
@@ -69,7 +81,12 @@ img {
   vertical-align: top;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-size: inherit;
   font-weight: 400;
 }
@@ -87,7 +104,7 @@ h1, h2, h3, h4, h5, h6 {
 header {
   grid-area: header;
   color: #f4f2f3;
-  background-color: #64766A;
+  background-color: #64766a;
 }
 
 h1 {
@@ -103,14 +120,14 @@ main {
 
 footer {
   grid-area: footer;
-  background-color: #64766A;
+  background-color: #64766a;
 }
 
 .sidebar {
   width: 50px;
   display: flex;
   flex-direction: column;
-  background-color: #94A7AE;
+  background-color: #94a7ae;
 }
 
 .sidebar__action-item {
@@ -131,15 +148,35 @@ footer {
 .sidebar__action-item:hover img {
   filter: none;
 }
+.sidebar__action-item:hover .sidebar__action-item--rounded, .sidebar__action-item:hover .sidebar__action-item--rounded-blue, .sidebar__action-item:hover .sidebar__action-item--rounded-red {
+  border: 2px solid black;
+}
 
 .workzone {
   position: relative;
   width: 100%;
-  background-color: #C0A9BD;
+  background-color: #c0a9bd;
   background-image: url("../src/img/background.jpg");
   background-size: 400px;
   background-repeat: repeat;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.sidebar__action-item--rounded, .sidebar__action-item--rounded-blue, .sidebar__action-item--rounded-red {
+  border-radius: 50%;
+  border: 2px solid white;
+  width: 30px;
+  height: 30px;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.sidebar__action-item--rounded-red {
+  background-color: rgb(255, 85, 85);
+}
+
+.sidebar__action-item--rounded-blue {
+  background-color: rgba(0, 195, 255, 0.78);
 }

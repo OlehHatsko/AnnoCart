@@ -1,7 +1,8 @@
-import { Component, ComponentRef, QueryList, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ComponentRef, ElementRef, QueryList, ViewChild, ViewContainerRef } from '@angular/core';
 import { BoxSelectionComponent } from './box-selection/box-selection.component';
 import { DataService } from './data-service/dataService';
 import { ImageWorkzoneComponent } from './image-workzone/image-workzone.component';
+import { InfoBlockComponent } from './info-block/info-block.component';
 
 @Component({
   selector: 'app-root',
@@ -9,8 +10,9 @@ import { ImageWorkzoneComponent } from './image-workzone/image-workzone.componen
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  //selectionsContainer: ViewContainerRef;
   @ViewChild(ImageWorkzoneComponent) selectionsContainer: ImageWorkzoneComponent;
+  @ViewChild('workzone', { read: ViewContainerRef }) workzone: ViewContainerRef;
+
   title = 'AnnoCart';
   private file: File;
 
@@ -20,6 +22,8 @@ export class AppComponent {
 
   ngAfterViewInit() {
     this.emptyTextElement = $('.image-workzone-block__empty-message');
+
+    console.log(this.workzone);
   }
 
   selectImageButtonPressed() {
@@ -40,7 +44,8 @@ export class AppComponent {
       return;
     }
 
-    this.selectionsContainer.createBoxSelection();
+    let createdInfoBlock = this.workzone.createComponent(InfoBlockComponent);
+    this.selectionsContainer.createBoxSelection(createdInfoBlock);
   }
 
   selectPointPressed() {
@@ -48,7 +53,7 @@ export class AppComponent {
   }
 
   showAll() {
-
+    this.selectionsContainer.toggleAll();
   }
 
   makeSelectionsRed() {

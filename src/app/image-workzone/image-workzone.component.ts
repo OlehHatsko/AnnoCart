@@ -1,6 +1,9 @@
 import { Component, ComponentRef, ElementRef, EventEmitter, Inject, Input, Output, ViewChild, ViewContainerRef } from '@angular/core';
 import { BoxSelectionComponent } from '../box-selection/box-selection.component';
 import { DataService } from '../data-service/dataService';
+import { InfoBlockComponent } from '../info-block/info-block.component';
+import { ISelection } from '../ts/ISelection';
+import { SelectionType } from '../ts/SelectionType';
 
 @Component({
   selector: 'image-workzone',
@@ -17,10 +20,11 @@ export class ImageWorkzoneComponent {
   imageBlockElement: JQuery<HTMLElement>;
 
   public isImageLoaded = false;
-
+  public areAllVisible = false;
   private isSquareSelectionCreatingEnabled = false;
 
-  private components = new Array<ComponentRef<BoxSelectionComponent>>();
+  private infoBlocks = new Array<ComponentRef<InfoBlockComponent>>();
+  private components = new Array<ComponentRef<ISelection>>();
 
   constructor(private dataService: DataService, private elementRef: ElementRef) {
     this.dataService.currentFile.subscribe(file => this.file = file);
@@ -40,7 +44,9 @@ export class ImageWorkzoneComponent {
     }
   }
 
-  public createBoxSelection() {
+  public createBoxSelection(infoBlock: ComponentRef<InfoBlockComponent>) {
+    this.infoBlocks.push(infoBlock);
+    infoBlock.instance.setImageWorkzoneComponent(this);
     this.isSquareSelectionCreatingEnabled = true;
   }
 
@@ -59,6 +65,8 @@ export class ImageWorkzoneComponent {
     if (this.isSquareSelectionCreatingEnabled) {
 
       let createdComponent = this.selectionsContainer.createComponent(BoxSelectionComponent);
+      createdComponent.instance.id = this.components.length;
+
       let createdComponentStyle = createdComponent.instance.elRef.nativeElement.style;
 
       createdComponent.instance.initialPoint = { pointX: event.offsetX + 15, pointY: event.offsetY + 15 };
@@ -68,31 +76,59 @@ export class ImageWorkzoneComponent {
 
       this.components.push(createdComponent);
 
-      document.addEventListener('mousemove', event => this.documentDragging(event))
+      document.addEventListener('mousemove', this.dragLambda)
       document.addEventListener('mouseup', this.finishDragging);
     }
   }
 
-  finishDragging() {
+  finishDragging = () => {
     if (this.isSquareSelectionCreatingEnabled) {
+      document.removeEventListener('mousemove', this.dragLambda)
+      document.removeEventListener('mouseup', this.finishDragging);
+
       this.isSquareSelectionCreatingEnabled = false;
 
-      this.components[this.components.length - 1].instance.makeHoverable();
-
-      document.removeEventListener('mousemove', event => this.documentDragging(event))
-      document.removeEventListener('mouseup', this.finishDragging);
+      this.infoBlocks[this.infoBlocks.length - 1].instance.setFields(this.components.length - 1, SelectionType.box, this.components[this.components.length - 1].instance);
+      this.infoBlocks[this.infoBlocks.length - 1].instance.show();
     }
   }
 
-  private documentDragging(event: MouseEvent) {
+  documentDragging(event: MouseEvent) {
     if (this.isSquareSelectionCreatingEnabled) {
       let coorY = event.clientY - this.imageBlockElement.offset().top;
       let coorX = event.clientX - this.imageBlockElement.offset().left;
 
-      let createdComponent = this.components[this.components.length - 1];
-      createdComponent.instance.updateSizing(coorX, coorY, this.imageBlockElement.width(), this.imageBlockElement.height());
+      let createdSquareSelection = this.components[this.components.length - 1].instance as BoxSelectionComponent;
+      createdSquareSelection.updateSizing(coorX, coorY, this.imageBlockElement.width(), this.imageBlockElement.height());
     }
   }
+
+  deleteSelection(infoBlock: InfoBlockComponent) {
+    console.log(this.infoBlocks[0].instance == infoBlock);
+    let deletableInfoBlock = this.infoBlocks.filter(x => x.instance == infoBlock)[0];
+    this.infoBlocks = this.infoBlocks.filter(x => x.instance != infoBlock);
+    let deletableComponent = this.components.filter(x => x.instance.id == infoBlock.selectionId && x.instance.selectionType == infoBlock.selectionType)[0];
+    console.log(this.components);
+
+    this.components = this.components.filter(x => x.instance.id != infoBlock.selectionId || x.instance.selectionType != infoBlock.selectionType);
+    deletableInfoBlock.destroy();
+    deletableComponent.destroy();
+  }
+
+  public toggleAll() {
+    if (!this.areAllVisible) {
+      this.components.forEach(x => x.instance.show());
+    }
+    else {
+      this.components.forEach(x => x.instance.hide());
+    }
+
+    this.areAllVisible = !this.areAllVisible;
+
+    this.components.forEach(x => x.instance.isShowAllEnabled = this.areAllVisible);
+  }
+
+  private dragLambda = (event: MouseEvent) => this.documentDragging(event);
 
   private showTextElement() {
     this.emptyTextElement.show();
@@ -114,6 +150,7 @@ export class ImageWorkzoneComponent {
     image.onload = function () {
       chSizesFunc(image.width, image.height, imgParentBlock);
     }
+
     this.imageBlockElement.css('background-image', `url(${url})`);
     this.elementRef.nativeElement.style.setProperty('min-width', 'auto');
   }
