@@ -1,4 +1,5 @@
 import { Component, ElementRef, HostBinding, HostListener } from '@angular/core';
+import { of } from 'rxjs';
 import { InfoBlockComponent } from '../info-block/info-block.component';
 import { ISelection } from '../ts/ISelection';
 import { SelectionType } from '../ts/SelectionType';
@@ -9,6 +10,8 @@ import { SelectionType } from '../ts/SelectionType';
   styleUrls: ['./box-selection.component.scss']
 })
 export class BoxSelectionComponent implements ISelection {
+  static color = 'b';
+
   @HostBinding('class')
   elementClass: string;
 
@@ -24,6 +27,11 @@ export class BoxSelectionComponent implements ISelection {
   infoBlock: InfoBlockComponent;
 
   constructor(public elRef: ElementRef) {
+    switch(BoxSelectionComponent.color)
+    {
+      case 'b': this.makeBlue(); break
+      case 'r': this.makeRed(); break;
+    }
   }
 
   public show() {
@@ -32,6 +40,24 @@ export class BoxSelectionComponent implements ISelection {
 
   public hide() {
     this.elementClass = 'hoverable-selection';
+  }
+
+  public makeBlue() {
+    console.log('blue');
+    
+    let style = this.elRef.nativeElement.style;
+    style.setProperty('border-color','rgba(0, 195, 255, 0.78)');
+    style.setProperty('background-color','rgba(0, 195, 255, 0.28)');
+    BoxSelectionComponent.color = 'b';
+  }
+
+  public makeRed() {
+    console.log('red');
+
+    let style = this.elRef.nativeElement.style;
+    style.setProperty('border-color','rgba(255, 56, 62, 0.78)');
+    style.setProperty('background-color','rgba(255, 56, 62, 0.28)');
+    BoxSelectionComponent.color = 'r';
   }
 
   public updateSizing(mouseX: number, mouseY: number, parentWidth: number, parentHeight: number) {

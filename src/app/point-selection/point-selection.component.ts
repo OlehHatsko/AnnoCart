@@ -1,4 +1,4 @@
-import { Component, HostBinding, HostListener } from '@angular/core';
+import { Component, ElementRef, HostBinding, HostListener } from '@angular/core';
 import { InfoBlockComponent } from '../info-block/info-block.component';
 import { ISelection } from '../ts/ISelection';
 import { SelectionType } from '../ts/SelectionType';
@@ -12,10 +12,19 @@ export class PointSelectionComponent implements ISelection {
   @HostBinding('class')
   elementClass: string;
   
+  initialPoint: {
+    pointX: number;
+    pointY: number;
+  }
+
   isShowAllEnabled = false;
   id: number;
   selectionType = SelectionType.point;
   infoBlock: InfoBlockComponent;
+
+  constructor (public elRef: ElementRef) {
+    console.log(elRef);
+  }
 
   public show() {
     this.elementClass = '';

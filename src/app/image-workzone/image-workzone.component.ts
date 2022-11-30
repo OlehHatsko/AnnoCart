@@ -2,6 +2,7 @@ import { Component, ComponentRef, ElementRef, EventEmitter, Inject, Input, Outpu
 import { BoxSelectionComponent } from '../box-selection/box-selection.component';
 import { DataService } from '../data-service/dataService';
 import { InfoBlockComponent } from '../info-block/info-block.component';
+import { PointSelectionComponent } from '../point-selection/point-selection.component';
 import { ISelection } from '../ts/ISelection';
 import { SelectionType } from '../ts/SelectionType';
 
@@ -22,6 +23,7 @@ export class ImageWorkzoneComponent {
   public isImageLoaded = false;
   public areAllVisible = false;
   private isSquareSelectionCreatingEnabled = false;
+  private isPointSelectionCreatingEnabled = false;
 
   private infoBlocks = new Array<ComponentRef<InfoBlockComponent>>();
   private components = new Array<ComponentRef<ISelection>>();
@@ -36,6 +38,10 @@ export class ImageWorkzoneComponent {
         this.file = file;
         this.isImageLoaded = true;
         this.showImageElement();
+        this.components.forEach(x => x.destroy());
+        this.infoBlocks.forEach(x => x.destroy());
+        this.components = new Array<ComponentRef<ISelection>>();
+        this.infoBlocks = new Array<ComponentRef<InfoBlockComponent>>();
       }
       else {
         this.showWrongFormatMessage();
@@ -48,6 +54,39 @@ export class ImageWorkzoneComponent {
     this.infoBlocks.push(infoBlock);
     infoBlock.instance.setImageWorkzoneComponent(this);
     this.isSquareSelectionCreatingEnabled = true;
+  }
+
+  public createPointSelection(infoBlock: ComponentRef<InfoBlockComponent>) {
+    this.infoBlocks.push(infoBlock);
+    infoBlock.instance.setImageWorkzoneComponent(this);
+    this.isPointSelectionCreatingEnabled = true;
+  }
+
+  public initPointSelection(event: MouseEvent) {
+    if (this.isPointSelectionCreatingEnabled) {
+      let createdComponent = this.selectionsContainer.createComponent(PointSelectionComponent);
+      createdComponent.instance.isShowAllEnabled = this.areAllVisible;
+      createdComponent.instance.id = this.components.length;
+
+      let createdComponentStyle = createdComponent.instance.elRef.nativeElement.style;
+
+      createdComponent.instance.initialPoint = { pointX: event.offsetX, pointY: event.offsetY };
+
+      console.log(createdComponent.instance.initialPoint);
+
+
+      createdComponentStyle.setProperty('top', this.formatToPx(createdComponent.instance.initialPoint.pointY));
+      createdComponentStyle.setProperty('left', this.formatToPx(createdComponent.instance.initialPoint.pointX));
+
+      this.components.push(createdComponent);
+
+      this.isPointSelectionCreatingEnabled = false;
+
+      let comp = this.components[this.components.length - 1].instance;
+
+      this.infoBlocks[this.infoBlocks.length - 1].instance.setFields(this.components.length - 1, comp);
+      this.infoBlocks[this.infoBlocks.length - 1].instance.show();
+    }
   }
 
   ngAfterViewInit() {
@@ -65,6 +104,7 @@ export class ImageWorkzoneComponent {
     if (this.isSquareSelectionCreatingEnabled) {
 
       let createdComponent = this.selectionsContainer.createComponent(BoxSelectionComponent);
+      createdComponent.instance.isShowAllEnabled = this.areAllVisible;
       createdComponent.instance.id = this.components.length;
 
       let createdComponentStyle = createdComponent.instance.elRef.nativeElement.style;
@@ -88,7 +128,7 @@ export class ImageWorkzoneComponent {
 
       this.isSquareSelectionCreatingEnabled = false;
 
-      this.infoBlocks[this.infoBlocks.length - 1].instance.setFields(this.components.length - 1, SelectionType.box, this.components[this.components.length - 1].instance);
+      this.infoBlocks[this.infoBlocks.length - 1].instance.setFields(this.components.length - 1, this.components[this.components.length - 1].instance);
       this.infoBlocks[this.infoBlocks.length - 1].instance.show();
     }
   }
@@ -104,14 +144,14 @@ export class ImageWorkzoneComponent {
   }
 
   deleteSelection(infoBlock: InfoBlockComponent) {
-    console.log(this.infoBlocks[0].instance == infoBlock);
     let deletableInfoBlock = this.infoBlocks.filter(x => x.instance == infoBlock)[0];
     this.infoBlocks = this.infoBlocks.filter(x => x.instance != infoBlock);
     let deletableComponent = this.components.filter(x => x.instance.id == infoBlock.selectionId && x.instance.selectionType == infoBlock.selectionType)[0];
-    console.log(this.components);
+
 
     this.components = this.components.filter(x => x.instance.id != infoBlock.selectionId || x.instance.selectionType != infoBlock.selectionType);
     deletableInfoBlock.destroy();
+
     deletableComponent.destroy();
   }
 
@@ -126,6 +166,20 @@ export class ImageWorkzoneComponent {
     this.areAllVisible = !this.areAllVisible;
 
     this.components.forEach(x => x.instance.isShowAllEnabled = this.areAllVisible);
+  }
+
+  public makeSelectionRed() {
+    this.components
+      .filter(x => x.instance.selectionType == SelectionType.box)
+      .map(x => x.instance as BoxSelectionComponent)
+      .forEach(x => x.makeRed());
+  }
+
+  public makeSelectionBlue() {
+    this.components
+      .filter(x => x.instance.selectionType == SelectionType.box)
+      .map(x => x.instance as BoxSelectionComponent)
+      .forEach(x => x.makeBlue());
   }
 
   private dragLambda = (event: MouseEvent) => this.documentDragging(event);

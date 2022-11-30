@@ -49,7 +49,13 @@ export class AppComponent {
   }
 
   selectPointPressed() {
-    alert('selectPointPressed');
+    if(!this.selectionsContainer.isImageLoaded){
+      this.showErrorMessage('Load image first!');
+      return;
+    }
+
+    let createdInfoBlock = this.workzone.createComponent(InfoBlockComponent);
+    this.selectionsContainer.createPointSelection(createdInfoBlock);
   }
 
   showAll() {
@@ -57,11 +63,11 @@ export class AppComponent {
   }
 
   makeSelectionsRed() {
-
+    this.selectionsContainer.makeSelectionRed();
   }
 
   makeSelectionsBlue() {
-
+    this.selectionsContainer.makeSelectionBlue();
   }
 
   private showErrorMessage(message: string)

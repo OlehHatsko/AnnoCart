@@ -31,11 +31,11 @@ export class InfoBlockComponent implements IShowable {
     this.hide();
   }
 
-  public setFields(selectionId: number, selectionType: SelectionType, showable: ISelection) {
+  public setFields(selectionId: number, selection: ISelection) {
     this.selectionId = selectionId;
-    this.selectionType = selectionType;
+    this.selectionType = selection.selectionType;
 
-    this.showable = showable;
+    this.showable = selection;
   }
 
   public hide() {
